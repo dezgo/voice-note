@@ -22,8 +22,8 @@ def send_voice_note_email(
         "text": body,
     }
 
-    path = Path(audio_path)
-    if path.is_file():
+    path = Path(audio_path) if audio_path else None
+    if path and path.is_file():
         mime_type, _ = mimetypes.guess_type(path.name)
         params["attachments"] = [
             {
