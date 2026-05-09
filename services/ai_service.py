@@ -16,10 +16,7 @@ NEXT ACTIONS:
 
 REMINDERS / FOLLOW-UPS:
 - <item>
-(omit section if none)
-
-ORIGINAL TRANSCRIPT:
-<verbatim transcript>"""
+(omit section if none)"""
 
 
 def curate_transcript(transcript: str, api_key: str) -> dict:

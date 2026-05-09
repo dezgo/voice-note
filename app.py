@@ -37,6 +37,7 @@ def voice_note():
     # Curate with AI
     try:
         result = curate_transcript(transcript, app.config["OPENAI_API_KEY"])
+        result["body"] += f"\n\n---\nORIGINAL TRANSCRIPT:\n{transcript}"
     except Exception as exc:
         logger.exception("AI processing failed")
         return jsonify({"ok": False, "error": f"AI failure: {exc}"}), 502
