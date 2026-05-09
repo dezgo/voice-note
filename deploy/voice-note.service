@@ -1,0 +1,22 @@
+[Unit]
+Description=Voice Note Flask app
+After=network.target
+
+[Service]
+User=derek
+Group=www-data
+WorkingDirectory=/var/www/voice-note
+EnvironmentFile=/var/www/voice-note/.env
+RuntimeDirectory=voice-note
+RuntimeDirectoryMode=0775
+ExecStart=/var/www/voice-note/.venv/bin/gunicorn \
+  --workers 2 \
+  --bind unix:/run/voice-note/voice-note.sock \
+  --umask 007 \
+  --access-logfile /var/log/voice-note/access.log \
+  --error-logfile /var/log/voice-note/error.log \
+  app:app
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
