@@ -1,5 +1,4 @@
 import logging
-import os
 from datetime import datetime
 from pathlib import Path
 
@@ -26,16 +25,14 @@ def voice_note():
         return jsonify({"ok": False, "error": "Missing transcript"}), 400
 
     audio_file = request.files.get("audio")
-    if not audio_file or not audio_file.filename:
-        return jsonify({"ok": False, "error": "Missing audio file"}), 400
-
-    # Save audio with a timestamped filename
-    ext = Path(audio_file.filename).suffix or ".m4a"
-    timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-    save_name = f"voice_note_{timestamp}{ext}"
-    save_path = _upload_dir / save_name
-    audio_file.save(save_path)
-    logger.info("Saved audio to %s", save_path)
+    save_path = None
+    if audio_file and audio_file.filename:
+        ext = Path(audio_file.filename).suffix or ".m4a"
+        timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        save_name = f"voice_note_{timestamp}{ext}"
+        save_path = _upload_dir / save_name
+        audio_file.save(save_path)
+        logger.info("Saved audio to %s", save_path)
 
     # Curate with AI
     try:
@@ -49,7 +46,7 @@ def voice_note():
         send_voice_note_email(
             title=result["title"],
             body=result["body"],
-            audio_path=str(save_path),
+            audio_path=str(save_path) if save_path else None,
             api_key=app.config["RESEND_API_KEY"],
             mail_from=app.config["MAIL_FROM"],
             mail_to=app.config["MAIL_TO"],
