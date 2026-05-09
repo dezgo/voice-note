@@ -50,10 +50,7 @@ def voice_note():
             title=result["title"],
             body=result["body"],
             audio_path=str(save_path),
-            mail_server=app.config["MAIL_SERVER"],
-            mail_port=app.config["MAIL_PORT"],
-            mail_username=app.config["MAIL_USERNAME"],
-            mail_password=app.config["MAIL_PASSWORD"],
+            api_key=app.config["RESEND_API_KEY"],
             mail_from=app.config["MAIL_FROM"],
             mail_to=app.config["MAIL_TO"],
         )
